@@ -351,6 +351,7 @@ play() {
     _end=$(printf "%s" "$ep_no" | grep -Eo '(-1|[0-9]+(\.[0-9]+)?)$')
     [ "$_start" = "-1" ] && ep_no=$(printf "%s" "$ep_list" | tail -n 1) && unset _start
     [ -z "$_end" ] || [ "$_end" = "$_start" ] && unset _start _end
+    [ "$_start" = "0" ] && _start=$(printf "%s" "$ep_list" | head -n 1)
     [ "$_end" = "-1" ] && _end=$(printf "%s" "$ep_list" | tail -n 1)
     _line_count=$(printf "%s\n" "$ep_no" | wc -l | tr -d "[:space:]")
     if [ "$_line_count" != 1 ] || [ -n "$_start" ]; then
