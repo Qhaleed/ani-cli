@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0e14" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src * blob:; connect-src *;" />
+    <title>ani-cli desktop</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">a<span>n</span></div>
+          <div>
+            <strong>ani-cli</strong>
+            <small>unofficial desktop companion</small>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Main navigation">
+          <button class="nav-item active" id="browseButton" type="button"><span class="nav-icon">⌂</span> Browse</button>
+          <button class="nav-item" id="legalButton" type="button"><span class="nav-icon">ⓘ</span> About &amp; licenses</button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="runtime-card">
+            <div class="eyebrow">RUNTIME</div>
+            <div class="runtime-status"><span class="status-dot" id="statusDot"></span><span id="statusText">Checking setup…</span></div>
+            <small class="runtime-detail" id="statusDetail">Checking dependencies…</small>
+            <button class="text-button" id="setupButton" type="button">Setup guide <span>↗</span></button>
+          </div>
+          <button class="source-link" id="sourceButton" type="button">Upstream ani-cli <span>↗</span></button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow">AN UNOFFICIAL DESKTOP COMPANION FOR ANI-CLI</div>
+            <h1>Find something to watch.</h1>
+          </div>
+          <div class="platform-pill" id="platformPill">● Detecting platform</div>
+        </header>
+
+        <div class="workspace-grid">
+          <aside class="control-column">
+            <section class="search-panel" aria-labelledby="search-heading">
+              <div class="section-heading">
+                <div>
+                  <div class="eyebrow">START A SESSION</div>
+                  <h3 id="search-heading">What are we watching?</h3>
+                </div>
+                <div class="shortcut" aria-label="Press Enter to search">↵</div>
+              </div>
+
+              <form id="launchForm">
+                <label class="search-field">
+                  <span class="search-icon">⌕</span>
+                  <input id="query" name="query" autocomplete="off" placeholder="Search anime…" autofocus />
+                </label>
+                <p class="field-example">Try “Frieren” or “One Piece”</p>
+
+                <label class="field-group">
+                  <span>Playback quality</span>
+                  <select id="quality" name="quality">
+                    <option value="">Auto (recommended)</option>
+                    <option value="1080p">1080p</option>
+                    <option value="720p">720p</option>
+                    <option value="480p">480p</option>
+                  </select>
+                </label>
+
+                <div class="toggle-stack">
+                  <label class="toggle-label"><span><strong>Dubbed audio</strong><small>Prefer dubbed results</small></span><input id="dub" type="checkbox" /><span class="toggle"></span></label>
+                  <label class="toggle-label"><span><strong>Download episode</strong><small>Save instead of playing</small></span><input id="download" type="checkbox" /><span class="toggle"></span></label>
+                </div>
+
+                <div class="capability-row"><span><i></i> In-app playback</span><span>AniDB source</span></div>
+                <button class="launch-button" id="launchButton" type="submit"><span>Search anime</span><span class="button-arrow">⌕</span></button>
+                <div class="form-message" id="formMessage" role="status"></div>
+              </form>
+            </section>
+          </aside>
+
+          <div class="content-column" id="contentColumn">
+            <div class="welcome-view" id="welcomeSection">
+              <section class="hero-card">
+                <div class="hero-copy">
+                  <div class="hero-kicker">BROWSE · PICK · WATCH</div>
+                  <h2>Search anime<br /><em>without the terminal.</em></h2>
+                  <p>Choose a title and episode. Playback and downloads stay inside this desktop app.</p>
+                </div>
+                <div class="hero-orbit" aria-hidden="true"><span>✦</span><i></i><b>▶</b></div>
+              </section>
+
+              <section class="info-row">
+                <article class="info-card accent-card">
+                  <div class="card-icon">▶</div>
+                  <div><h4>Watch in this window</h4><p>Search, select, and play without switching to a terminal.</p></div>
+                </article>
+                <article class="info-card">
+                  <div class="card-icon muted-icon">↓</div>
+                  <div><h4>Save an episode</h4><p>Turn on download before choosing an episode.</p></div>
+                </article>
+              </section>
+            </div>
+
+            <section class="results-section hidden" id="resultsSection" aria-labelledby="resultsHeading">
+              <div class="section-heading compact-heading"><div><div class="eyebrow">SEARCH RESULTS</div><h3 id="resultsHeading">Choose a title</h3></div><span class="result-count" id="resultCount"></span></div>
+              <div class="anime-results" id="animeResults"></div>
+            </section>
+
+            <section class="results-section hidden" id="episodesSection" aria-labelledby="episodesHeading">
+              <div class="section-heading compact-heading"><div><div class="eyebrow">EPISODES</div><h3 id="episodesHeading">Choose an episode</h3></div><button class="back-button" id="backToResults" type="button">← Titles</button></div>
+              <div class="selected-title" id="selectedTitle"></div>
+              <div class="episode-results" id="episodeResults"></div>
+            </section>
+
+            <section class="player-section hidden" id="playerSection" aria-labelledby="playerHeading">
+              <div class="section-heading compact-heading"><div><div class="eyebrow">NOW PLAYING</div><h3 id="playerHeading">Video</h3></div><button class="back-button" id="closePlayer" type="button">← Episodes</button></div>
+              <div class="video-wrap"><video id="videoPlayer" controls playsinline></video><div class="video-loading" id="videoLoading">Loading stream…</div></div>
+            </section>
+          </div>
+        </div>
+
+        <footer><span>ani-cli desktop 0.1.0</span><span>Open source companion · <button id="footerSource" type="button">pystardust/ani-cli</button></span></footer>
+      </main>
+    </div>
+    <dialog class="legal-dialog" id="legalDialog" aria-labelledby="legalHeading">
+      <div class="dialog-shell">
+        <div class="dialog-heading">
+          <div>
+            <div class="eyebrow">ABOUT THIS APP</div>
+            <h3 id="legalHeading">Licensing &amp; attribution</h3>
+          </div>
+          <button class="dialog-close" id="closeLegal" type="button" aria-label="Close licensing dialog">×</button>
+        </div>
+
+        <p class="legal-intro"><strong>ani-cli desktop</strong> is an unofficial, open-source desktop companion. It is not affiliated with or endorsed by the ani-cli maintainers.</p>
+
+        <div class="legal-list">
+          <article class="legal-item">
+            <span class="legal-icon">©</span>
+            <div><h4>Project license</h4><p>This project is released under the GNU General Public License v3.0-only. You may use, study, modify, and redistribute it under those terms.</p></div>
+          </article>
+          <article class="legal-item">
+            <span class="legal-icon">a</span>
+            <div><h4>Upstream attribution</h4><p>The bundled ani-cli source remains credited and licensed by its upstream project. This GUI does not replace or invoke its interactive terminal menu.</p></div>
+          </article>
+          <article class="legal-item">
+            <span class="legal-icon">◎</span>
+            <div><h4>Third-party software</h4><p>Electron and hls.js are used under their respective open-source licenses. Full notices are included with this project.</p></div>
+          </article>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="dialog-link" id="openNotices" type="button">Open third-party notices ↗</button>
+          <button class="dialog-link" id="openLicense" type="button">Open GPL license ↗</button>
+          <button class="dialog-done" id="doneLegal" type="button">Done</button>
+        </div>
+      </div>
+    </dialog>
+    <script src="../node_modules/hls.js/dist/hls.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

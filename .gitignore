@@ -1,0 +1,20 @@
+node_modules/
+.DS_Store
+*.log
+**/.git-upstream/
+
+# The bundled upstream checkout keeps its own repository-only material.
+ani-cli/.assets/
+ani-cli/.github/
+ani-cli/Formula/
+ani-cli/*.md
+ani-cli/*.1
+ani-cli/*.sh
+
+# Downloaded media and local provider artifacts
+downloads/
+*.mp4
+*.mkv
+*.webm
+*.ts
+cookies.txt

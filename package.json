@@ -1,0 +1,21 @@
+{
+  "name": "ani-cli-desktop",
+  "version": "0.1.0",
+  "description": "An open-source desktop GUI for ani-cli.",
+  "license": "GPL-3.0-only",
+  "keywords": ["anime", "ani-cli", "electron", "hls"],
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "diagnostics": "node scripts/diagnostics.js",
+    "check": "node --check main.js && node --check preload.js && node --check renderer/app.js"
+  },
+  "devDependencies": {
+    "electron": "^37.2.6"
+  },
+  "dependencies": {
+    "hls.js": "^1.7.0"
+  }
+}
