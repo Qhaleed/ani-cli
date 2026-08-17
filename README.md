@@ -30,7 +30,7 @@ Requirements:
 - `ffmpeg` or `yt-dlp` only if you want the download feature.
 
 ```sh
-git clone <your-repository-url>
+git clone https://github.com/Qhaleed/ani-cli.git
 cd ani-cli-client
 npm install
 npm start
